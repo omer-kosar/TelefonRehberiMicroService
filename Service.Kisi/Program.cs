@@ -1,3 +1,10 @@
+using FluentValidation.AspNetCore;
+using Kisi.Service.Extensions;
+using Kisi.Service.Filters;
+using Microsoft.AspNetCore.Mvc;
+using Service.Kisi.Extensions;
+using System.Reflection;
+
 namespace Service.Kisi
 {
     public class Program
@@ -8,12 +15,24 @@ namespace Service.Kisi
 
             // Add services to the container.
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers().AddFluentValidation(options =>
+            {
+                options.ImplicitlyValidateChildProperties = true;
+                options.ImplicitlyValidateRootCollectionElements = true;
+                options.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+            });
+            builder.Services.AddScoped<ValidationFilter>();
+            builder.Services.Configure<ApiBehaviorOptions>(options
+                => options.SuppressModelStateInvalidFilter = true); ;
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            var app = builder.Build();
+            builder.Services.ConfigurePostgreSqlContext(builder.Configuration);
+            builder.Services.ConfigureRepository();
+            builder.Services.ConfigureVersioning();
+            builder.Services.ConfigureVersionedApiExplorer();
+            var app = builder.Build().MigrateDatabase();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

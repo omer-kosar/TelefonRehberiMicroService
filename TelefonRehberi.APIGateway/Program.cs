@@ -1,3 +1,5 @@
+using Service.Kisi.Extensions;
+
 namespace TelefonRehberi.APIGateway
 {
     public class Program
@@ -13,6 +15,9 @@ namespace TelefonRehberi.APIGateway
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            builder.Services.ConfigureVersioning();
+            builder.Services.ConfigureVersionedApiExplorer();
+            builder.Services.ConfigureKisiServisiHttpClient(builder.Configuration);
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
