@@ -27,5 +27,13 @@ namespace TelefonRehberi.APIGateway.HttpClientServices
             var result = await response.ReadContentAs<Kisi>();
             return new ApiOkResponse<Kisi>(result);
         }
+        public async Task<ApiBaseResponse> GetirKisiListesi()
+        {
+            var response = await _client.GetAsync("api/v1/persons");
+
+            response.EnsureSuccessStatusCode();
+            var result = await response.ReadContentAs<IEnumerable<Kisi>>();
+            return new ApiOkResponse<IEnumerable<Kisi>>(result);
+        }
     }
 }
