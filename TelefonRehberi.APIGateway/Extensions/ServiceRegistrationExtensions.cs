@@ -1,4 +1,7 @@
 ﻿
+using TelefonRehberi.APIGateway.HttpClientServices.Interfaces;
+using TelefonRehberi.APIGateway.HttpClientServices;
+
 namespace Service.Kisi.Extensions
 {
     public static class ServiceRegistrationExtensions
@@ -16,5 +19,9 @@ namespace Service.Kisi.Extensions
                 options.GroupNameFormat = "'v'VVV";
                 options.SubstituteApiVersionInUrl = true;
             });
+        public static void ConfigureKisiServisiHttpClient(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddHttpClient<IKisiService, KisiService>(kisi => kisi.BaseAddress = new Uri(configuration["ApiSettings:KisiUrl"]));
+        }
     }
 }
