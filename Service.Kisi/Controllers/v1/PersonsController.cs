@@ -1,4 +1,5 @@
-﻿using Mapster;
+﻿using Kisi.Service.Filters;
+using Mapster;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Service.Kisi.Dto;
@@ -37,6 +38,7 @@ namespace Service.Kisi.Controllers.v1
             return Ok(kisiListDto);
         }
         [HttpPost]
+        [ServiceFilter(typeof(ValidationFilter))]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         public async Task<IActionResult> KisiKaydet([FromBody] KisiDto kisi)
         {
