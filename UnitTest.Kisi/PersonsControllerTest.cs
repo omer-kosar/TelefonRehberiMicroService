@@ -47,6 +47,36 @@ namespace UnitTest.Kisi
             Assert.NotNull(result);
             Assert.Equal(StatusCodes.Status404NotFound, result.StatusCode);
         }
+        [Fact]
+        public async Task ButunKisilerGetirilmekIstendiginde_KisiListesiniDoner()
+        {
+            var repository = await CreateRepositoryAsync();
+            var personsController = new PersonsController(repository);
+            var actionResult = await personsController.GetirKisiListesi() as ObjectResult;
+            // Act
+            // Assert
+            Assert.NotNull(actionResult);
+            Assert.Equal(StatusCodes.Status200OK, actionResult.StatusCode);
+            Assert.IsAssignableFrom<IEnumerable<KisiListDto>>(actionResult.Value);
+            Assert.NotEmpty(actionResult.Value as IEnumerable<KisiListDto>);
+        }
+
+        [Fact]
+        public async Task GecerliKisiModelIleKisiKaydedildiginde_KisiKaydeder()
+        {
+            var repository = await CreateRepositoryAsync();
+            var personsController = new PersonsController(repository);
+            var kisiDto = new KisiDto
+            {
+                Id = Guid.NewGuid(),
+                Ad = "Steve",
+                Soyad = "Kaufman",
+                Firma = "Linq Ltd. Şt."
+            };
+            var result = await personsController.KisiKaydet(kisiDto) as StatusCodeResult;
+            Assert.NotNull(result);
+            Assert.Equal(StatusCodes.Status204NoContent, result.StatusCode);
+        }
         private async Task<KisiRepository> CreateRepositoryAsync()
         {
             KisiContext context = new KisiContext(dbContextOptions);

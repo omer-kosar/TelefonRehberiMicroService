@@ -28,5 +28,21 @@ namespace Service.Kisi.Controllers.v1
                 return NotFound();
             return Ok(kisiDto);
         }
+        [HttpGet]
+        [ProducesResponseType(typeof(IEnumerable<Entities.Kisi>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> GetirKisiListesi()
+        {
+            var kisiler = await _kisiRepository.GetirKisiListesi();
+            var kisiListDto = kisiler.Adapt<IEnumerable<KisiListDto>>();
+            return Ok(kisiListDto);
+        }
+        [HttpPost]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        public async Task<IActionResult> KisiKaydet([FromBody] KisiDto kisi)
+        {
+            var kisiEntity = kisi.Adapt<Entities.Kisi>();
+            await _kisiRepository.KisiKaydet(kisiEntity);
+            return NoContent();
+        }
     }
 }
