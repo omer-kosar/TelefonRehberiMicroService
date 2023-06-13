@@ -1,4 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Service.Kisi.Controllers.v1;
 using Service.Kisi.Data;
 using Service.Kisi.Repositories;
 using System;
@@ -6,76 +9,33 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Service.Kisi.Dto;
 
 namespace UnitTest.Kisi
 {
-    public class KisiRepositoryTests
+    public class PersonsControllerTest
     {
         private DbContextOptions<KisiContext> dbContextOptions;
-        public KisiRepositoryTests()
+        public PersonsControllerTest()
         {
             var dbName = $"KisiDb_{DateTime.Now.ToFileTimeUtc()}";
             dbContextOptions = new DbContextOptionsBuilder<KisiContext>()
                 .UseInMemoryDatabase(dbName)
                 .Options;
         }
-
         [Fact]
-        public async Task IdIleKisiGetir_KisiDoner()
+        public async Task KisiIdIleKisiIstendiginde_KisiGetiri()
         {
             var repository = await CreateRepositoryAsync();
+            var personsController = new PersonsController(repository);
 
-            var id = new Guid("856b39fb-d802-4574-a0b4-872a12589c59");
-            // Act
-            var kisi = await repository.GetirKisiById(id);
-
-            // Assert
-            Assert.NotNull(kisi);
-            Assert.Equal(id, kisi.Id);
-            Assert.Equal("John", kisi.Ad);
-        }
-        [Fact]
-        public async Task GecerliKisiModelVerildiginde_KisiOlusturur()
-        {
-            var repository = await CreateRepositoryAsync();
-
-            var id = new Guid("856b39fb-d802-4574-a0b4-872a12589c60");
-            // Act
-            await repository.KisiKaydet(new Service.Kisi.Entities.Kisi
-            {
-                Id = id,
-                Ad = "Bill",
-                Soyad = "Gates",
-                Firma = "Microsoft Coorporation"
-            });
-
-            // Assert
-            var kisi = await repository.GetirKisiById(id);
-
-            Assert.NotNull(kisi);
-            Assert.Equal(id, kisi.Id);
-            Assert.Equal("Bill", kisi.Ad);
-        }
-
-        [Fact]
-        public async Task KisiListesiIstendiginde_KisileriDoner()
-        {
-            var repository = await CreateRepositoryAsync();
-            var kisiList = await repository.GetirKisiListesi();
-            Assert.NotEmpty(kisiList);
-            Assert.Equal(3, kisiList.Count());
-        }
-        [Fact]
-        public async Task GecerliKisiIdIle_KisiSilindiginde_KisiSiler()
-        {
-            var repository = await CreateRepositoryAsync();
-            var id = new Guid("856b39fb-d802-4574-a0b4-872a12589c59");
-            await repository.KisiSil(id);
-
-            var kisiList = await repository.GetirKisiListesi();
-            // Assert
-            Assert.NotEmpty(kisiList);
-            Assert.Equal(2, kisiList.Count());
+            var id = Guid.Parse("856b39fb-d802-4574-a0b4-872a12589c59");
+            var result = await personsController.getirKisiById(id) as ObjectResult;
+            Assert.NotNull(result);
+            Assert.Equal(StatusCodes.Status200OK, result.StatusCode);
+            Assert.IsAssignableFrom<KisiDto>(result.Value);
+            Assert.NotNull(result.Value as KisiDto);
         }
 
         private async Task<KisiRepository> CreateRepositoryAsync()
