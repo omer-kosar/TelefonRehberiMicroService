@@ -62,6 +62,14 @@ namespace UnitTest.Kisi
             await PopulateDataAsync(context);
             return new KisiRepository(context);
         }
+        [Fact]
+        public async Task KisiListesiIstendiginde_KisileriDoner()
+        {
+            var repository = await CreateRepositoryAsync();
+            var kisiList = await repository.GetirKisiListesi();
+            Assert.NotEmpty(kisiList);
+            Assert.Equal(3, kisiList.Count());
+        }
 
         private async Task PopulateDataAsync(KisiContext context)
         {

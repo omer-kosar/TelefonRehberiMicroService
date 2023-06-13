@@ -1,4 +1,5 @@
-﻿using Service.Kisi.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using Service.Kisi.Data;
 using Service.Kisi.Repositories.Interfaces;
 
 namespace Service.Kisi.Repositories
@@ -18,6 +19,11 @@ namespace Service.Kisi.Repositories
         public async Task<Entities.Kisi> GetirKisiById(Guid id)
         {
             return await _context.Kisi.FindAsync(id);
+        }
+
+        public async Task<IEnumerable<Entities.Kisi>> GetirKisiListesi()
+        {
+            return await _context.Kisi.ToListAsync();
         }
     }
 }
