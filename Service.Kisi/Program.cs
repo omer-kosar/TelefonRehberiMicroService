@@ -1,3 +1,5 @@
+using Service.Kisi.Extensions;
+
 namespace Service.Kisi
 {
     public class Program
@@ -13,6 +15,7 @@ namespace Service.Kisi
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            builder.Services.ConfigurePostgreSqlContext(builder.Configuration);
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
