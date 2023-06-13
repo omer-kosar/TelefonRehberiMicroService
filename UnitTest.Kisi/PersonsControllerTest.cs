@@ -37,7 +37,16 @@ namespace UnitTest.Kisi
             Assert.IsAssignableFrom<KisiDto>(result.Value);
             Assert.NotNull(result.Value as KisiDto);
         }
-
+        [Fact]
+        public async Task KayitliOlmayanKisiIdIleGetirildiginde_BulunamadiDoner()
+        {
+            var repository = await CreateRepositoryAsync();
+            var personsController = new PersonsController(repository);
+            var id = Guid.Parse("f4f4e3bf-afa6-4399-87b5-a3fe17572c4d");
+            var result = await personsController.getirKisiById(id) as StatusCodeResult;
+            Assert.NotNull(result);
+            Assert.Equal(StatusCodes.Status404NotFound, result.StatusCode);
+        }
         private async Task<KisiRepository> CreateRepositoryAsync()
         {
             KisiContext context = new KisiContext(dbContextOptions);
