@@ -33,6 +33,17 @@ namespace TelefonRehberi.APIGateway.Controllers.v1
             var kisiListesi = result.GetResult<IEnumerable<Kisi>>();
             return Ok(kisiListesi);
         }
+        [HttpPost("/kisi")]
+        public async Task<IActionResult> CreateKisi(Kisi kisi)
+        {
+
+            var baseResult = await _kisiService.KisiKaydet(kisi);
+            if (!baseResult.Success)
+            {
+                return ProcessError(baseResult);
+            }
+            return NoContent();
+        }
         private IActionResult ProcessError(ApiBaseResponse baseResponse)
         {
             return baseResponse switch
@@ -41,6 +52,11 @@ namespace TelefonRehberi.APIGateway.Controllers.v1
                 {
                     Message = ((ApiNotFoundResponse)baseResponse).Message,
                     StatusCode = StatusCodes.Status404NotFound
+                }),
+                ApiUnprocessableResponse => UnprocessableEntity(new ErrorDetail
+                {
+                    Message = ((ApiUnprocessableResponse)baseResponse).Message,
+                    StatusCode = StatusCodes.Status400BadRequest
                 })
             };
         }
