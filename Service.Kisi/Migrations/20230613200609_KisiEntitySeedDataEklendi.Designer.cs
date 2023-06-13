@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Service.Kisi.Data;
@@ -11,9 +12,11 @@ using Service.Kisi.Data;
 namespace Service.Kisi.Migrations
 {
     [DbContext(typeof(KisiContext))]
-    partial class KisiContextModelSnapshot : ModelSnapshot
+    [Migration("20230613200609_KisiEntitySeedDataEklendi")]
+    partial class KisiEntitySeedDataEklendi
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
