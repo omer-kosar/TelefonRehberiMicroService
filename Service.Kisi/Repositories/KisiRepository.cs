@@ -25,5 +25,12 @@ namespace Service.Kisi.Repositories
         {
             return await _context.Kisi.ToListAsync();
         }
+
+        public async Task KisiSil(Guid id)
+        {
+            var deletedKisi = await _context.Kisi.FindAsync(id);
+            _context.Kisi.Remove(deletedKisi);
+            await _context.SaveChangesAsync();
+        }
     }
 }

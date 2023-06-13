@@ -70,7 +70,18 @@ namespace UnitTest.Kisi
             Assert.NotEmpty(kisiList);
             Assert.Equal(3, kisiList.Count());
         }
+        [Fact]
+        public async Task GecerliKisiIdIle_KisiSilindiginde_KisiSiler()
+        {
+            var repository = await CreateRepositoryAsync();
+            var id = new Guid("856b39fb-d802-4574-a0b4-872a12589c59");
+            await repository.KisiSil(id);
 
+            var kisiList = await repository.GetirKisiListesi();
+            // Assert
+            Assert.NotEmpty(kisiList);
+            Assert.Equal(2, kisiList.Count());
+        }
         private async Task PopulateDataAsync(KisiContext context)
         {
 
