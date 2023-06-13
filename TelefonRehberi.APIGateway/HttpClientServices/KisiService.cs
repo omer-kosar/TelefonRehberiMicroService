@@ -52,5 +52,19 @@ namespace TelefonRehberi.APIGateway.HttpClientServices
             var result = await response.ReadContentAs<string>();
             return new ApiOkResponse<string>(result);
         }
+        public async Task<ApiBaseResponse> KisiSil(Guid id)
+        {
+            var response = await _client.DeleteAsync($"api/v1/persons/{id}");
+
+            if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                var errorMessage = await response.ReadContentAs();
+                return new PersonNotFoundResponse(errorMessage);
+            }
+
+            response.EnsureSuccessStatusCode();
+            var result = await response.ReadContentAs<string>();
+            return new ApiOkResponse<string>(result);
+        }
     }
 }
