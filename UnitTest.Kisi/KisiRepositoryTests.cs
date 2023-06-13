@@ -56,12 +56,7 @@ namespace UnitTest.Kisi
             Assert.Equal(id, kisi.Id);
             Assert.Equal("Bill", kisi.Ad);
         }
-        private async Task<KisiRepository> CreateRepositoryAsync()
-        {
-            KisiContext context = new KisiContext(dbContextOptions);
-            await PopulateDataAsync(context);
-            return new KisiRepository(context);
-        }
+
         [Fact]
         public async Task KisiListesiIstendiginde_KisileriDoner()
         {
@@ -81,6 +76,13 @@ namespace UnitTest.Kisi
             // Assert
             Assert.NotEmpty(kisiList);
             Assert.Equal(2, kisiList.Count());
+        }
+
+        private async Task<KisiRepository> CreateRepositoryAsync()
+        {
+            KisiContext context = new KisiContext(dbContextOptions);
+            await PopulateDataAsync(context);
+            return new KisiRepository(context);
         }
         private async Task PopulateDataAsync(KisiContext context)
         {
