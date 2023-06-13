@@ -44,5 +44,15 @@ namespace Service.Kisi.Controllers.v1
             await _kisiRepository.KisiKaydet(kisiEntity);
             return NoContent();
         }
+        [HttpDelete("{id:guid}")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        public async Task<IActionResult> KisiSil(Guid id)
+        {
+            var deletedKisi = await _kisiRepository.GetirKisiById(id);
+            if (deletedKisi is null)
+                return NotFound($"Person was not able to found with id:{id}");
+            await _kisiRepository.KisiSil(id);
+            return NoContent();
+        }
     }
 }

@@ -77,6 +77,32 @@ namespace UnitTest.Kisi
             Assert.NotNull(result);
             Assert.Equal(StatusCodes.Status204NoContent, result.StatusCode);
         }
+
+        [Fact]
+        public async Task KayitliKisiIdIleSilinmekIstendiginde_KisiSiler()
+        {
+            var repository = await CreateRepositoryAsync();
+            var personsController = new PersonsController(repository);
+
+            var id = Guid.Parse("856b39fb-d802-4574-a0b4-872a12589c59");
+            var result = await personsController.KisiSil(id) as StatusCodeResult;
+            Assert.NotNull(result);
+            Assert.Equal(StatusCodes.Status204NoContent, result.StatusCode);
+        }
+        [Fact]
+        public async Task KayitliOlmayanIdIleKisiSilinmekIstendiginde_BulunamadiDoner()
+        {
+            var repository = await CreateRepositoryAsync();
+            var personsController = new PersonsController(repository);
+
+            var id = Guid.Parse("f4f4e3bf-afa6-4399-87b5-a3fe17572c4d");
+
+            var result = await personsController.KisiSil(id) as ObjectResult;
+            Assert.NotNull(result);
+
+            Assert.Equal(StatusCodes.Status404NotFound, result.StatusCode);
+            Assert.Equal($"Person was not able to found with id:{id}", result.Value);
+        }
         private async Task<KisiRepository> CreateRepositoryAsync()
         {
             KisiContext context = new KisiContext(dbContextOptions);
