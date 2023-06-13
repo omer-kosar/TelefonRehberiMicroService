@@ -15,5 +15,9 @@ namespace Service.Kisi.Repositories
             _context.Kisi.Add(kisi);
             await _context.SaveChangesAsync();
         }
+        public async Task<Entities.Kisi> GetirKisiById(Guid id)
+        {
+            return await _context.Kisi.FindAsync(id);
+        }
     }
 }
