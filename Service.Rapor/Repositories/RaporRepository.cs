@@ -18,5 +18,11 @@ namespace Service.Rapor.Repositories
             return await _context.Rapor.FindAsync(id);
 
         }
+
+        public async Task RaporKaydet(Entities.Rapor rapor)
+        {
+            _context.Rapor.Add(rapor);
+            await _context.SaveChangesAsync();
+        }
     }
 }
