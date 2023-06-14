@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Service.Rapor.Dto;
+using Service.Rapor.Repositories;
 using Service.Rapor.Repositories.Interfaces;
 using System.Net;
 
@@ -13,10 +14,12 @@ namespace Service.Rapor.Controllers.v1
     public class ReportsController : ControllerBase
     {
         private readonly IRaporRepository _raporRepository;
+        private readonly IRaporBilgiRepository _raporBilgiRepository;
 
-        public ReportsController(IRaporRepository raporRepository)
+        public ReportsController(IRaporRepository raporRepository, IRaporBilgiRepository raporBilgiRepository)
         {
             _raporRepository = raporRepository;
+            _raporBilgiRepository = raporBilgiRepository;
         }
 
         [HttpPost]
@@ -34,6 +37,14 @@ namespace Service.Rapor.Controllers.v1
             var raporlar = await _raporRepository.GetirRaporListesi();
             var raporListDto = raporlar.Adapt<IEnumerable<RaporListDto>>();
             return Ok(raporListDto);
+        }
+        [HttpGet("{raporId:guid}")]
+        [ProducesResponseType(typeof(IEnumerable<RaporBilgiListDto>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> GetirRaporDetayBilgileri(Guid raporId)
+        {
+            var raporBilgileri = await _raporBilgiRepository.GetirRaporDetayBilgiList(raporId);
+            var raporBilgiListDto = raporBilgileri.Adapt<IEnumerable<RaporBilgiListDto>>();
+            return Ok(raporBilgiListDto);
         }
     }
 }
