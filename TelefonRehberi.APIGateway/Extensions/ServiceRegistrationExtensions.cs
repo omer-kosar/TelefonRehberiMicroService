@@ -1,6 +1,7 @@
 ﻿
 using TelefonRehberi.APIGateway.HttpClientServices.Interfaces;
 using TelefonRehberi.APIGateway.HttpClientServices;
+using TelefonRehberi.APIGateway.RabbitMQ;
 
 namespace Service.Kisi.Extensions
 {
@@ -31,5 +32,10 @@ namespace Service.Kisi.Extensions
         {
             services.AddHttpClient<IRaporService, RaporService>(kisi => kisi.BaseAddress = new Uri(configuration["ApiSettings:RaporUrl"]));
         }
+        public static void ConfigureRabbitMqProducerService(this IServiceCollection services)
+        {
+            services.AddScoped<IMessageProducer, RabbitMQProducer>();
+        }
+
     }
 }

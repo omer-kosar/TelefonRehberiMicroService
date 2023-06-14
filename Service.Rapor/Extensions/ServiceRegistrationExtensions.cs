@@ -1,5 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Service.Kisi.Data;
+using Service.Rapor.BackgroundServices;
+using Service.Rapor.HttpClientServices;
+using Service.Rapor.HttpClientServices.Interfaces;
 using Service.Rapor.Repositories;
 using Service.Rapor.Repositories.Interfaces;
 
@@ -29,5 +32,13 @@ namespace Service.Rapor.Extensions
                 options.GroupNameFormat = "'v'VVV";
                 options.SubstituteApiVersionInUrl = true;
             });
+        public static void ConfigureRabbitMQConsumerBackgroundService(this IServiceCollection services)
+        {
+            services.AddHostedService<RaporServiceConsumer>();
+        }
+        public static void ConfigureIletisimServisiHttpClient(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddHttpClient<IILetisimService, IletisimService>(kisi => kisi.BaseAddress = new Uri(configuration["ApiSettings:IletisimUrl"]));
+        }
     }
 }
