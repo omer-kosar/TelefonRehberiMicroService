@@ -34,6 +34,8 @@ namespace Service.Rapor
 
             AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
+            builder.Services.ConfigureRabbitMQConsumerBackgroundService();
+            builder.Services.ConfigureIletisimServisiHttpClient(builder.Configuration);
             var app = builder.Build().MigrateDatabase();
 
             // Configure the HTTP request pipeline.
