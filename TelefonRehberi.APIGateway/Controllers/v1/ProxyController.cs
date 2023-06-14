@@ -1,6 +1,7 @@
 ﻿using Entities.Responses;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using TelefonRehberi.APIGateway.Enums;
 using TelefonRehberi.APIGateway.HttpClientServices;
 using TelefonRehberi.APIGateway.HttpClientServices.Interfaces;
@@ -10,6 +11,7 @@ using TelefonRehberi.APIGateway.Models.Iletisim;
 using TelefonRehberi.APIGateway.Models.Kisi;
 using TelefonRehberi.APIGateway.Models.Rapor;
 using TelefonRehberi.APIGateway.Models.Responses;
+using TelefonRehberi.APIGateway.RabbitMQ;
 
 namespace TelefonRehberi.APIGateway.Controllers.v1
 {
@@ -18,16 +20,17 @@ namespace TelefonRehberi.APIGateway.Controllers.v1
     [ApiController]
     public class ProxyController : ControllerBase
     {
-        //kisiid ile iletişim bilgileri getir
         private readonly IKisiService _kisiService;
         private readonly IIletisimService _iletisimService;
         private readonly IRaporService _raporService;
+        private readonly IMessageProducer _messageProducer;
 
-        public ProxyController(IKisiService kisiService, IIletisimService iletisimService, IRaporService raporService)
+        public ProxyController(IKisiService kisiService, IIletisimService iletisimService, IRaporService raporService, IMessageProducer messageProducer)
         {
             _kisiService = kisiService;
             _iletisimService = iletisimService;
             _raporService = raporService;
+            _messageProducer = messageProducer;
         }
 
         [HttpGet("/kisi")]
@@ -105,7 +108,7 @@ namespace TelefonRehberi.APIGateway.Controllers.v1
             return Ok(kisiIletisimBilgileri);
         }
         [HttpPost("/rapor")]
-        public async Task<IActionResult> RaporKaydet()
+        public async Task<IActionResult> RaporKaydet(string konum)
         {
             var yeniRapor = new Models.Rapor.Rapor { Durum = (int)RaporDurum.Hazirlaniyor, TalepEdildigiTarih = DateTimeOffset.UtcNow };
             var baseResult = await _raporService.RaporKaydet(yeniRapor);
@@ -114,7 +117,7 @@ namespace TelefonRehberi.APIGateway.Controllers.v1
                 return ProcessError(baseResult);
             }
             var raporId = baseResult.GetResult<Guid>();
-
+            _messageProducer.SendRaporOlusturMesaj(new RaporTalepModel { RaporId = raporId, Konum = konum });
             return Accepted(new RaporResponseModel { RaporId = raporId, Durum = "Hazırlanıyor", TalepEdildigiTarihi = yeniRapor.TalepEdildigiTarih });
         }
         [HttpGet("/rapor")]
