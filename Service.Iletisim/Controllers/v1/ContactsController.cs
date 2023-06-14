@@ -13,7 +13,6 @@ namespace Service.Iletisim.Controllers.v1
     [ApiController]
     public class ContactsController : ControllerBase
     {
-        //iletişim sil
         //konum raporu getir
         //kişi id ile iletişim bilgileri getir
         private readonly IIletisimRepository _iletisimRepository;
@@ -40,6 +39,13 @@ namespace Service.Iletisim.Controllers.v1
                 return NotFound($"Contact was not able to found with id:{id}");
             await _iletisimRepository.IletisimSil(id);
             return NoContent();
+        }
+        [HttpGet]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        public async Task<IActionResult> GetirKonumRaporu(string konum)
+        {
+            var konumRaporu = await _iletisimRepository.GetirKonumRaporByKonum(konum);
+            return Ok(konumRaporu);
         }
     }
 }

@@ -71,6 +71,22 @@ namespace UnitTest.Iletisim
             Assert.Equal(StatusCodes.Status404NotFound, result.StatusCode);
             Assert.Equal($"Contact was not able to found with id:{id}", result.Value);
         }
+
+        [Fact]
+        public async Task KonumIleKonumRaporuGetirilmekIstendiginde_KonumRaporuDoner()
+        {
+            var repository = await CreateRepositoryAsync();
+            var contactsController = new ContactsController(repository);
+
+            var konum = "Ankara";
+
+            var result = await contactsController.GetirKonumRaporu(konum) as ObjectResult;
+
+            Assert.NotNull(result);
+            Assert.Equal(StatusCodes.Status200OK, result.StatusCode);
+            Assert.IsAssignableFrom<KonumRaporuDto>(result.Value);
+            Assert.NotNull(result.Value as KonumRaporuDto);
+        }
         private async Task<IletisimRepository> CreateRepositoryAsync()
         {
             IletisimContext context = new IletisimContext(dbContextOptions);
