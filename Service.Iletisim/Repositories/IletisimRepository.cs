@@ -27,5 +27,12 @@ namespace Service.Iletisim.Repositories
         {
             return await _context.Iletisim.ToListAsync();
         }
+
+        public async Task IletisimSil(Guid id)
+        {
+            var deletedIletisim = await _context.Iletisim.FindAsync(id);
+            _context.Iletisim.Remove(deletedIletisim);
+            await _context.SaveChangesAsync();
+        }
     }
 }

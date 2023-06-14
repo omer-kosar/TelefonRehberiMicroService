@@ -66,6 +66,19 @@ namespace UnitTest.Iletisim
             Assert.NotEmpty(iletisimList);
             Assert.Equal(6, iletisimList.Count());
         }
+
+        [Fact]
+        public async Task GecerliIletisimIdIle_IletisimSilindiginde_IletisimSiler()
+        {
+            var repository = await CreateRepositoryAsync();
+            var id = new Guid("e85e3cf0-974e-4bc5-9dee-7d47094d039e");
+            await repository.IletisimSil(id);
+
+            var iletisimList = await repository.GetirIletisimListesi();
+            // Assert
+            Assert.NotEmpty(iletisimList);
+            Assert.Equal(5, iletisimList.Count());
+        }
         private async Task<IletisimRepository> CreateRepositoryAsync()
         {
             IletisimContext context = new IletisimContext(dbContextOptions);
