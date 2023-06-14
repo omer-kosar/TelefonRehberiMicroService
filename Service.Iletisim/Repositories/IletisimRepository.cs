@@ -22,5 +22,10 @@ namespace Service.Iletisim.Repositories
         {
             return await _context.Iletisim.FindAsync(id);
         }
+
+        public async Task<IEnumerable<Entities.Iletisim>> GetirIletisimListesi()
+        {
+            return await _context.Iletisim.ToListAsync();
+        }
     }
 }

@@ -57,6 +57,15 @@ namespace UnitTest.Iletisim
             Assert.Equal("05383941232", iletisim.Icerik);
             Assert.Equal((int)IletisimType.Telefon, iletisim.IletisimType);
         }
+
+        [Fact]
+        public async Task IletisimListesiIstendiginde_IletisimleriDoner()
+        {
+            var repository = await CreateRepositoryAsync();
+            var iletisimList = await repository.GetirIletisimListesi();
+            Assert.NotEmpty(iletisimList);
+            Assert.Equal(6, iletisimList.Count());
+        }
         private async Task<IletisimRepository> CreateRepositoryAsync()
         {
             IletisimContext context = new IletisimContext(dbContextOptions);
