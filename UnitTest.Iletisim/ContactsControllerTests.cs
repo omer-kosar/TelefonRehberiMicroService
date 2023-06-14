@@ -93,6 +93,20 @@ namespace UnitTest.Iletisim
             await PopulateDataAsync(context);
             return new IletisimRepository(context);
         }
+        [Fact]
+        public async Task KisiIdIleIletisimBilgileriGetirilmekIstendiginde_IletisimBilgileriniDoner()
+        {
+            var repository = await CreateRepositoryAsync();
+            var contactsController = new ContactsController(repository);
+            var kisiId = new Guid("856b39fb-d802-4574-a0b4-872a12589c59");
+            var actionResult = await contactsController.GetirIletisimBilgileriByKisiId(kisiId) as ObjectResult;
+            // Act
+            // Assert
+            Assert.NotNull(actionResult);
+            Assert.Equal(StatusCodes.Status200OK, actionResult.StatusCode);
+            Assert.IsAssignableFrom<IEnumerable<IletisimListDto>>(actionResult.Value);
+            Assert.NotEmpty(actionResult.Value as IEnumerable<IletisimListDto>);
+        }
         private async Task PopulateDataAsync(IletisimContext context)
         {
 

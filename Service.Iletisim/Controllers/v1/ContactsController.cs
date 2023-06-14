@@ -13,7 +13,6 @@ namespace Service.Iletisim.Controllers.v1
     [ApiController]
     public class ContactsController : ControllerBase
     {
-        //konum raporu getir
         //kişi id ile iletişim bilgileri getir
         private readonly IIletisimRepository _iletisimRepository;
         public ContactsController(IIletisimRepository iletisimRepository)
@@ -46,6 +45,14 @@ namespace Service.Iletisim.Controllers.v1
         {
             var konumRaporu = await _iletisimRepository.GetirKonumRaporByKonum(konum);
             return Ok(konumRaporu);
+        }
+        [HttpGet("{kisiId:guid}")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        public async Task<IActionResult> GetirIletisimBilgileriByKisiId(Guid kisiId)
+        {
+            var iletisimBilgileri = await _iletisimRepository.GetirIletisimBilgileriByKisiId(kisiId);
+            var iletisimBilgileriList=iletisimBilgileri.Adapt<List<IletisimListDto>>();
+            return Ok(iletisimBilgileriList);
         }
     }
 }
