@@ -1,4 +1,8 @@
+using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Mvc;
 using Service.Rapor.Extensions;
+using Service.Rapor.Filters;
+using System.Reflection;
 
 namespace Service.Rapor
 {
@@ -10,7 +14,15 @@ namespace Service.Rapor
 
             // Add services to the container.
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers().AddFluentValidation(options =>
+            {
+                options.ImplicitlyValidateChildProperties = true;
+                options.ImplicitlyValidateRootCollectionElements = true;
+                options.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+            });
+            builder.Services.AddScoped<ValidationFilter>();
+            builder.Services.Configure<ApiBehaviorOptions>(options
+                => options.SuppressModelStateInvalidFilter = true);
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -19,6 +31,9 @@ namespace Service.Rapor
 
             builder.Services.ConfigureVersioning();
             builder.Services.ConfigureVersionedApiExplorer();
+
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
             var app = builder.Build().MigrateDatabase();
 
             // Configure the HTTP request pipeline.
