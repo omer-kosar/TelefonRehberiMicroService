@@ -3,7 +3,6 @@
     public interface IRaporRepository
     {
 
-        //rapor güncelle
         Task<Entities.Rapor> GetirRaporById(Guid id);
         Task RaporKaydet(Entities.Rapor rapor);
         Task<IEnumerable<Entities.Rapor>> GetirRaporListesi();
