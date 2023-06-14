@@ -1,3 +1,5 @@
+using Service.Iletisim.Extensions;
+
 namespace Service.Iletisim
 {
     public class Program
@@ -13,7 +15,9 @@ namespace Service.Iletisim
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            var app = builder.Build();
+            builder.Services.ConfigurePostgreSqlContext(builder.Configuration);
+
+            var app = builder.Build().MigrateDatabase();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
