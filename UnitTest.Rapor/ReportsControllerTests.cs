@@ -42,6 +42,19 @@ namespace UnitTest.Rapor
             Assert.Equal(true, Guid.TryParse(result.Value.ToString(), out var iletisimId));
         }
 
+        [Fact]
+        public async Task ButunRaporlarGetirilmekIstendiginde_RaporListesiniDoner()
+        {
+            var repository = await CreateRepositoryAsync();
+            var reportsController = new ReportsController(repository);
+            
+            var actionResult = await reportsController.GetirRaporListesi() as ObjectResult;
+
+            Assert.NotNull(actionResult);
+            Assert.Equal(StatusCodes.Status200OK, actionResult.StatusCode);
+            Assert.IsAssignableFrom<IEnumerable<RaporListDto>>(actionResult.Value);
+            Assert.NotEmpty(actionResult.Value as IEnumerable<RaporListDto>);
+        }
         private async Task<RaporRepository> CreateRepositoryAsync()
         {
             RaporContext context = new RaporContext(dbContextOptions);

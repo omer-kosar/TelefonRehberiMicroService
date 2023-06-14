@@ -27,5 +27,13 @@ namespace Service.Rapor.Controllers.v1
             await _raporRepository.RaporKaydet(raporEntity);
             return Ok(raporEntity.Id);
         }
+        [HttpGet]
+        [ProducesResponseType(typeof(IEnumerable<RaporListDto>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> GetirRaporListesi()
+        {
+            var raporlar = await _raporRepository.GetirRaporListesi();
+            var raporListDto = raporlar.Adapt<IEnumerable<RaporListDto>>();
+            return Ok(raporListDto);
+        }
     }
 }
