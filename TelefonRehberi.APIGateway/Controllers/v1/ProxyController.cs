@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using TelefonRehberi.APIGateway.HttpClientServices.Interfaces;
 using TelefonRehberi.APIGateway.Models.ErrorModels;
 using TelefonRehberi.APIGateway.Models.Exceptions;
+using TelefonRehberi.APIGateway.Models.Iletisim;
 using TelefonRehberi.APIGateway.Models.Kisi;
 using TelefonRehberi.APIGateway.Models.Responses;
 
@@ -14,7 +15,9 @@ namespace TelefonRehberi.APIGateway.Controllers.v1
     [ApiController]
     public class ProxyController : ControllerBase
     {
-
+        //iletişimkaydet
+        //iletişimsil
+        //kisiid ile iletişim bilgileri getir
         private readonly IKisiService _kisiService;
 
         public ProxyController(IKisiService kisiService)
