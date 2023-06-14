@@ -169,7 +169,7 @@ namespace TelefonRehberi.APIGateway.Controllers.v1
                 ApiUnprocessableResponse => UnprocessableEntity(new ErrorDetail
                 {
                     Message = ((ApiUnprocessableResponse)baseResponse).Message,
-                    StatusCode = StatusCodes.Status400BadRequest
+                    StatusCode = StatusCodes.Status422UnprocessableEntity
                 })
             };
         }
