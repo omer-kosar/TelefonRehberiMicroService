@@ -15,7 +15,6 @@ using TelefonRehberi.APIGateway.RabbitMQ;
 
 namespace TelefonRehberi.APIGateway.Controllers.v1
 {
-    [Route("api/v{version:apiVersion}/telefon-rehberi-gateway")]
     [ApiVersion("1.0")]
     [ApiController]
     public class ProxyController : ControllerBase
@@ -33,7 +32,8 @@ namespace TelefonRehberi.APIGateway.Controllers.v1
             _messageProducer = messageProducer;
         }
 
-        [HttpGet("/kisi")]
+        [HttpGet]
+        [Route("api/v{version:apiVersion}/telefon-rehberi-gateway/kisi")]
         public async Task<IActionResult> GetirKisiListesi()
         {
             var result = await _kisiService.GetirKisiListesi();
@@ -44,7 +44,8 @@ namespace TelefonRehberi.APIGateway.Controllers.v1
             var kisiListesi = result.GetResult<IEnumerable<Kisi>>();
             return Ok(kisiListesi);
         }
-        [HttpPost("/kisi")]
+        [HttpPost]
+        [Route("api/v{version:apiVersion}/telefon-rehberi-gateway/kisi")]
         public async Task<IActionResult> CreateKisi(Kisi kisi)
         {
 
@@ -56,7 +57,8 @@ namespace TelefonRehberi.APIGateway.Controllers.v1
             return NoContent();
         }
 
-        [HttpDelete("/kisi/{id}")]
+        [HttpDelete]
+        [Route("api/v{version:apiVersion}/telefon-rehberi-gateway/kisi/{id}")]
         public async Task<IActionResult> DeleteKisi(Guid id)
         {
             var baseResult = await _kisiService.KisiSil(id);
