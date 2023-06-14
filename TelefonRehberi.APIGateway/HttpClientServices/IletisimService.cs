@@ -15,6 +15,23 @@ namespace TelefonRehberi.APIGateway.HttpClientServices
         {
             _client = client ?? throw new ArgumentNullException(nameof(client));
         }
+
+        public async Task<ApiBaseResponse> GetIletisimBilgileriByKisiId(Guid kisiId)
+        {
+
+            var response = await _client.GetAsync($"api/v1/contacts/{kisiId}");
+
+            if (response.StatusCode == System.Net.HttpStatusCode.UnprocessableEntity)
+            {
+                var errorMessage = await response.ReadContentAs();
+                return new PersonUnprocessableResponse(errorMessage);
+            }
+
+            response.EnsureSuccessStatusCode();
+            var result = await response.ReadContentAs<List<IletisimBilgileri>>();
+            return new ApiOkResponse<List<IletisimBilgileri>>(result);
+        }
+
         public async Task<ApiBaseResponse> IletisimKaydet(IletisimBilgileri iletisim)
         {
             var stringContent = new StringContent(JsonConvert.SerializeObject(iletisim), Encoding.UTF8, "application/json");

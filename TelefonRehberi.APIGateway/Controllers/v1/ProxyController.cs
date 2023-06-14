@@ -15,8 +15,6 @@ namespace TelefonRehberi.APIGateway.Controllers.v1
     [ApiController]
     public class ProxyController : ControllerBase
     {
-        //iletişimkaydet
-        //iletişimsil
         //kisiid ile iletişim bilgileri getir
         private readonly IKisiService _kisiService;
         private readonly IIletisimService _iletisimService;
@@ -82,6 +80,24 @@ namespace TelefonRehberi.APIGateway.Controllers.v1
                 return ProcessError(baseResult);
             }
             return NoContent();
+        }
+        [HttpGet("/iletisim/{id}")]
+        public async Task<IActionResult> GetKisiIletisimBilgileri(Guid id)
+        {
+            var kisiResult = await _kisiService.GetirKisiById(id);
+            if (!kisiResult.Success)
+            {
+                return ProcessError(kisiResult);
+            }
+            var kisi = kisiResult.GetResult<Kisi>();
+            var iletisimResult = await _iletisimService.GetIletisimBilgileriByKisiId(id);
+            if (!iletisimResult.Success)
+            {
+                return ProcessError(iletisimResult);
+            }
+            var iletisimBilgileri = iletisimResult.GetResult<List<IletisimBilgileri>>();
+            var kisiIletisimBilgileri = new KisiIletisimbilgileri { Ad = kisi.Ad, Soyad = kisi.Soyad, Firma = kisi.Firma, IletisimBilgileri = iletisimBilgileri };
+            return Ok(kisiIletisimBilgileri);
         }
         private IActionResult ProcessError(ApiBaseResponse baseResponse)
         {

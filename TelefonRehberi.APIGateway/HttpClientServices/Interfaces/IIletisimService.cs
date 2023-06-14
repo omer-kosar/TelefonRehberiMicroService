@@ -5,10 +5,9 @@ namespace TelefonRehberi.APIGateway.HttpClientServices.Interfaces
 {
     public interface IIletisimService
     {
-        //iletişim sil
         //kişi ile iletişim getir
         Task<ApiBaseResponse> IletisimKaydet(IletisimBilgileri iletisim);
         Task<ApiBaseResponse> IletisimSil(Guid id);
-
+        Task<ApiBaseResponse> GetIletisimBilgileriByKisiId(Guid kisiId);
     }
 }

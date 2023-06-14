@@ -5,7 +5,7 @@ namespace TelefonRehberi.APIGateway.HttpClientServices.Interfaces
 {
     public interface IKisiService
     {
-        //Task<ApiBaseResponse> GetirKisiById(Guid id);
+        Task<ApiBaseResponse> GetirKisiById(Guid id);
         Task<ApiBaseResponse> GetirKisiListesi();
         Task<ApiBaseResponse> KisiKaydet(Kisi kisi);
         Task<ApiBaseResponse> KisiSil(Guid id);
