@@ -36,7 +36,7 @@ namespace UnitTest.Iletisim
                 Icerik = "05383945544"
             });
 
-            var iletisim = await repository.GetIletisimById(id);
+            var iletisim = await repository.GetirIletisimById(id);
 
             Assert.NotNull(iletisim);
             Assert.Equal(id, iletisim.Id);
@@ -51,7 +51,7 @@ namespace UnitTest.Iletisim
 
             var id = new Guid("e85e3cf0-974e-4bc5-9dee-7d47094d039e");
 
-            var iletisim = await repository.GetIletisimById(id);
+            var iletisim = await repository.GetirIletisimById(id);
 
             Assert.NotNull(iletisim);
             Assert.Equal(id, iletisim.Id);
@@ -87,7 +87,7 @@ namespace UnitTest.Iletisim
             var repository = await CreateRepositoryAsync();
             var kisiId = new Guid("856b39fb-d802-4574-a0b4-872a12589c59");
 
-            var iletisimList = await repository.GetIletisimBilgileriByKisiId(kisiId);
+            var iletisimList = await repository.GetirIletisimBilgileriByKisiId(kisiId);
 
             Assert.NotEmpty(iletisimList);
             Assert.Equal(3, iletisimList.Count());

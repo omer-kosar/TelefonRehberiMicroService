@@ -20,7 +20,7 @@ namespace Service.Iletisim.Repositories
             _context.Iletisim.Add(iletisim);
             await _context.SaveChangesAsync();
         }
-        public async Task<Entities.Iletisim> GetIletisimById(Guid id)
+        public async Task<Entities.Iletisim> GetirIletisimById(Guid id)
         {
             return await _context.Iletisim.FindAsync(id);
         }
@@ -36,7 +36,7 @@ namespace Service.Iletisim.Repositories
             _context.Iletisim.Remove(deletedIletisim);
             await _context.SaveChangesAsync();
         }
-        public async Task<IEnumerable<Entities.Iletisim>> GetIletisimBilgileriByKisiId(Guid kisiId)
+        public async Task<IEnumerable<Entities.Iletisim>> GetirIletisimBilgileriByKisiId(Guid kisiId)
         {
             return await _context.Iletisim.Where(i => i.KisiId.Equals(kisiId)).ToListAsync();
         }
