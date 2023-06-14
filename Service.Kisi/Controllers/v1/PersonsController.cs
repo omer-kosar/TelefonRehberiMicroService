@@ -21,7 +21,7 @@ namespace Service.Kisi.Controllers.v1
         }
         [HttpGet("{id:guid}", Name = "getirKisiById")]
         [ProducesResponseType(typeof(Entities.Kisi), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> getirKisiById(Guid id)
+        public async Task<IActionResult> GetirKisiById(Guid id)
         {
             var kisi = await _kisiRepository.GetirKisiById(id);
             var kisiDto = kisi.Adapt<KisiDto>();

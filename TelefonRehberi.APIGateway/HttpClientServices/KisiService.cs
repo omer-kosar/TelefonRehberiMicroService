@@ -19,10 +19,10 @@ namespace TelefonRehberi.APIGateway.HttpClientServices
         {
             var response = await _client.GetAsync($"api/v1/persons/{id}");
 
-            if (response.StatusCode == System.Net.HttpStatusCode.UnprocessableEntity)
+            if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
             {
                 var errorMessage = await response.ReadContentAs();
-                return new PersonNotFoundResponse(errorMessage);
+                return new ApiNotFoundResponse(errorMessage);
             }
 
             response.EnsureSuccessStatusCode();
@@ -45,7 +45,7 @@ namespace TelefonRehberi.APIGateway.HttpClientServices
             if (response.StatusCode == System.Net.HttpStatusCode.UnprocessableEntity)
             {
                 var errorMessage = await response.ReadContentAs();
-                return new PersonUnprocessableResponse(errorMessage);
+                return new ApiUnprocessableResponse(errorMessage);
             }
 
             response.EnsureSuccessStatusCode();
@@ -59,7 +59,7 @@ namespace TelefonRehberi.APIGateway.HttpClientServices
             if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
             {
                 var errorMessage = await response.ReadContentAs();
-                return new PersonNotFoundResponse(errorMessage);
+                return new ApiNotFoundResponse(errorMessage);
             }
 
             response.EnsureSuccessStatusCode();

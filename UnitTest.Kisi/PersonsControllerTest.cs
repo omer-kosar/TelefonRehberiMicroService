@@ -31,7 +31,7 @@ namespace UnitTest.Kisi
             var personsController = new PersonsController(repository);
 
             var id = Guid.Parse("856b39fb-d802-4574-a0b4-872a12589c59");
-            var result = await personsController.getirKisiById(id) as ObjectResult;
+            var result = await personsController.GetirKisiById(id) as ObjectResult;
             Assert.NotNull(result);
             Assert.Equal(StatusCodes.Status200OK, result.StatusCode);
             Assert.IsAssignableFrom<KisiDto>(result.Value);
@@ -43,7 +43,7 @@ namespace UnitTest.Kisi
             var repository = await CreateRepositoryAsync();
             var personsController = new PersonsController(repository);
             var id = Guid.Parse("f4f4e3bf-afa6-4399-87b5-a3fe17572c4d");
-            var result = await personsController.getirKisiById(id) as StatusCodeResult;
+            var result = await personsController.GetirKisiById(id) as StatusCodeResult;
             Assert.NotNull(result);
             Assert.Equal(StatusCodes.Status404NotFound, result.StatusCode);
         }
