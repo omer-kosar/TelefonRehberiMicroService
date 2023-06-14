@@ -8,5 +8,7 @@ namespace TelefonRehberi.APIGateway.HttpClientServices.Interfaces
         //iletişim sil
         //kişi ile iletişim getir
         Task<ApiBaseResponse> IletisimKaydet(IletisimBilgileri iletisim);
+        Task<ApiBaseResponse> IletisimSil(Guid id);
+
     }
 }

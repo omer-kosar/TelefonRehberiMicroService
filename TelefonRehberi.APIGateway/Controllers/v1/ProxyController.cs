@@ -73,6 +73,16 @@ namespace TelefonRehberi.APIGateway.Controllers.v1
             }
             return Ok(baseResult.GetResult<Guid>());
         }
+        [HttpDelete("/iletisim/{id}")]
+        public async Task<IActionResult> IletisimSil(Guid id)
+        {
+            var baseResult = await _iletisimService.IletisimSil(id);
+            if (!baseResult.Success)
+            {
+                return ProcessError(baseResult);
+            }
+            return NoContent();
+        }
         private IActionResult ProcessError(ApiBaseResponse baseResponse)
         {
             return baseResponse switch
