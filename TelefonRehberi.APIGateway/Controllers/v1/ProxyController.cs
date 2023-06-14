@@ -70,7 +70,9 @@ namespace TelefonRehberi.APIGateway.Controllers.v1
         }
 
 
-        [HttpPost("/iletisim")]
+        [HttpPost]
+        [Route("api/v{version:apiVersion}/telefon-rehberi-gateway/iletisim")]
+
         public async Task<IActionResult> Iletisim(IletisimBilgileri iletisim)
         {
 
@@ -81,7 +83,10 @@ namespace TelefonRehberi.APIGateway.Controllers.v1
             }
             return Ok(baseResult.GetResult<Guid>());
         }
-        [HttpDelete("/iletisim/{id}")]
+
+        [HttpDelete]
+        [Route("api/v{version:apiVersion}/telefon-rehberi-gateway/iletisim/{id}")]
+
         public async Task<IActionResult> IletisimSil(Guid id)
         {
             var baseResult = await _iletisimService.IletisimSil(id);
@@ -91,7 +96,9 @@ namespace TelefonRehberi.APIGateway.Controllers.v1
             }
             return NoContent();
         }
-        [HttpGet("/iletisim/{id}")]
+
+        [HttpGet]
+        [Route("api/v{version:apiVersion}/telefon-rehberi-gateway/iletisim/{id}")]
         public async Task<IActionResult> GetKisiIletisimBilgileri(Guid id)
         {
             var kisiResult = await _kisiService.GetirKisiById(id);
