@@ -15,7 +15,6 @@ using TelefonRehberi.APIGateway.RabbitMQ;
 
 namespace TelefonRehberi.APIGateway.Controllers.v1
 {
-    [Route("api/v{version:apiVersion}/telefon-rehberi-gateway")]
     [ApiVersion("1.0")]
     [ApiController]
     public class ProxyController : ControllerBase
@@ -33,7 +32,8 @@ namespace TelefonRehberi.APIGateway.Controllers.v1
             _messageProducer = messageProducer;
         }
 
-        [HttpGet("/kisi")]
+        [HttpGet]
+        [Route("api/v{version:apiVersion}/telefon-rehberi-gateway/kisi")]
         public async Task<IActionResult> GetirKisiListesi()
         {
             var result = await _kisiService.GetirKisiListesi();
@@ -44,7 +44,8 @@ namespace TelefonRehberi.APIGateway.Controllers.v1
             var kisiListesi = result.GetResult<IEnumerable<Kisi>>();
             return Ok(kisiListesi);
         }
-        [HttpPost("/kisi")]
+        [HttpPost]
+        [Route("api/v{version:apiVersion}/telefon-rehberi-gateway/kisi")]
         public async Task<IActionResult> CreateKisi(Kisi kisi)
         {
 
@@ -56,7 +57,8 @@ namespace TelefonRehberi.APIGateway.Controllers.v1
             return NoContent();
         }
 
-        [HttpDelete("/kisi/{id}")]
+        [HttpDelete]
+        [Route("api/v{version:apiVersion}/telefon-rehberi-gateway/kisi/{id}")]
         public async Task<IActionResult> DeleteKisi(Guid id)
         {
             var baseResult = await _kisiService.KisiSil(id);
@@ -68,7 +70,9 @@ namespace TelefonRehberi.APIGateway.Controllers.v1
         }
 
 
-        [HttpPost("/iletisim")]
+        [HttpPost]
+        [Route("api/v{version:apiVersion}/telefon-rehberi-gateway/iletisim")]
+
         public async Task<IActionResult> Iletisim(IletisimBilgileri iletisim)
         {
 
@@ -79,7 +83,10 @@ namespace TelefonRehberi.APIGateway.Controllers.v1
             }
             return Ok(baseResult.GetResult<Guid>());
         }
-        [HttpDelete("/iletisim/{id}")]
+
+        [HttpDelete]
+        [Route("api/v{version:apiVersion}/telefon-rehberi-gateway/iletisim/{id}")]
+
         public async Task<IActionResult> IletisimSil(Guid id)
         {
             var baseResult = await _iletisimService.IletisimSil(id);
@@ -89,7 +96,9 @@ namespace TelefonRehberi.APIGateway.Controllers.v1
             }
             return NoContent();
         }
-        [HttpGet("/iletisim/{id}")]
+
+        [HttpGet]
+        [Route("api/v{version:apiVersion}/telefon-rehberi-gateway/iletisim/{id}")]
         public async Task<IActionResult> GetKisiIletisimBilgileri(Guid id)
         {
             var kisiResult = await _kisiService.GetirKisiById(id);
@@ -107,7 +116,9 @@ namespace TelefonRehberi.APIGateway.Controllers.v1
             var kisiIletisimBilgileri = new KisiIletisimbilgileri { Ad = kisi.Ad, Soyad = kisi.Soyad, Firma = kisi.Firma, IletisimBilgileri = iletisimBilgileri };
             return Ok(kisiIletisimBilgileri);
         }
-        [HttpPost("/rapor")]
+
+        [HttpPost]
+        [Route("api/v{version:apiVersion}/telefon-rehberi-gateway/rapor")]
         public async Task<IActionResult> RaporKaydet(string konum)
         {
             var yeniRapor = new Models.Rapor.Rapor { Durum = (int)RaporDurum.Hazirlaniyor, TalepEdildigiTarih = DateTimeOffset.UtcNow };
@@ -120,7 +131,10 @@ namespace TelefonRehberi.APIGateway.Controllers.v1
             _messageProducer.SendRaporOlusturMesaj(new RaporTalepModel { RaporId = raporId, Konum = konum });
             return Accepted(new RaporResponseModel { RaporId = raporId, Durum = "Hazırlanıyor", TalepEdildigiTarihi = yeniRapor.TalepEdildigiTarih });
         }
-        [HttpGet("/rapor")]
+
+        [HttpGet]
+        [Route("api/v{version:apiVersion}/telefon-rehberi-gateway/rapor")]
+
         public async Task<IActionResult> GetirRaporListesi()
         {
             var baseResult = await _raporService.GetirRaporListesi();
@@ -131,7 +145,8 @@ namespace TelefonRehberi.APIGateway.Controllers.v1
             var result = baseResult.GetResult<IEnumerable<Rapor>>();
             return Ok(result);
         }
-        [HttpGet("/rapor/{raporId:guid}")]
+        [HttpGet]
+        [Route("api/v{version:apiVersion}/telefon-rehberi-gateway/rapor/{raporId:guid}")]
         public async Task<IActionResult> GetRaporRaporDetayBilgileri(Guid raporId)
         {
             var baseResult = await _raporService.GetirRaporDetayBilgileri(raporId);
@@ -154,7 +169,7 @@ namespace TelefonRehberi.APIGateway.Controllers.v1
                 ApiUnprocessableResponse => UnprocessableEntity(new ErrorDetail
                 {
                     Message = ((ApiUnprocessableResponse)baseResponse).Message,
-                    StatusCode = StatusCodes.Status400BadRequest
+                    StatusCode = StatusCodes.Status422UnprocessableEntity
                 })
             };
         }

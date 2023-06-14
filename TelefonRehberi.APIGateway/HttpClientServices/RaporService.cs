@@ -35,7 +35,7 @@ namespace TelefonRehberi.APIGateway.HttpClientServices
             if (response.StatusCode == System.Net.HttpStatusCode.UnprocessableEntity)
             {
                 var errorMessage = await response.ReadContentAs();
-                return new ReportUnprocessableResponse(errorMessage);
+                return new ApiUnprocessableResponse(errorMessage);
             }
 
             response.EnsureSuccessStatusCode();
