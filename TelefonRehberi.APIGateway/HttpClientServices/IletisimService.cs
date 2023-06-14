@@ -3,44 +3,23 @@ using Newtonsoft.Json;
 using System.Text;
 using TelefonRehberi.APIGateway.Extensions;
 using TelefonRehberi.APIGateway.HttpClientServices.Interfaces;
-using TelefonRehberi.APIGateway.Models.Kisi;
+using TelefonRehberi.APIGateway.Models.Iletisim;
 using TelefonRehberi.APIGateway.Models.Responses;
 
 namespace TelefonRehberi.APIGateway.HttpClientServices
 {
-    public class KisiService : IKisiService
+    public class IletisimService : IIletisimService
     {
         private readonly HttpClient _client;
-        public KisiService(HttpClient client)
+        public IletisimService(HttpClient client)
         {
             _client = client ?? throw new ArgumentNullException(nameof(client));
         }
-        public async Task<ApiBaseResponse> GetirKisiById(Guid id)
-        {
-            var response = await _client.GetAsync($"api/v1/persons/{id}");
 
-            if (response.StatusCode == System.Net.HttpStatusCode.UnprocessableEntity)
-            {
-                var errorMessage = await response.ReadContentAs();
-                return new PersonNotFoundResponse(errorMessage);
-            }
-
-            response.EnsureSuccessStatusCode();
-            var result = await response.ReadContentAs<Kisi>();
-            return new ApiOkResponse<Kisi>(result);
-        }
-        public async Task<ApiBaseResponse> GetirKisiListesi()
+        public async Task<ApiBaseResponse> GetIletisimBilgileriByKisiId(Guid kisiId)
         {
-            var response = await _client.GetAsync("api/v1/persons");
 
-            response.EnsureSuccessStatusCode();
-            var result = await response.ReadContentAs<IEnumerable<Kisi>>();
-            return new ApiOkResponse<IEnumerable<Kisi>>(result);
-        }
-        public async Task<ApiBaseResponse> KisiKaydet(Kisi kisi)
-        {
-            var stringContent = new StringContent(JsonConvert.SerializeObject(kisi), Encoding.UTF8, "application/json");
-            var response = await _client.PostAsync("api/v1/persons", stringContent);
+            var response = await _client.GetAsync($"api/v1/contacts/{kisiId}");
 
             if (response.StatusCode == System.Net.HttpStatusCode.UnprocessableEntity)
             {
@@ -49,12 +28,29 @@ namespace TelefonRehberi.APIGateway.HttpClientServices
             }
 
             response.EnsureSuccessStatusCode();
-            var result = await response.ReadContentAs<string>();
-            return new ApiOkResponse<string>(result);
+            var result = await response.ReadContentAs<List<IletisimBilgileri>>();
+            return new ApiOkResponse<List<IletisimBilgileri>>(result);
         }
-        public async Task<ApiBaseResponse> KisiSil(Guid id)
+
+        public async Task<ApiBaseResponse> IletisimKaydet(IletisimBilgileri iletisim)
         {
-            var response = await _client.DeleteAsync($"api/v1/persons/{id}");
+            var stringContent = new StringContent(JsonConvert.SerializeObject(iletisim), Encoding.UTF8, "application/json");
+            var response = await _client.PostAsync("api/v1/contacts", stringContent);
+
+            if (response.StatusCode == System.Net.HttpStatusCode.UnprocessableEntity)
+            {
+                var errorMessage = await response.ReadContentAs();
+                return new PersonUnprocessableResponse(errorMessage);
+            }
+
+            response.EnsureSuccessStatusCode();
+            var result = await response.ReadContentAs<Guid>();
+            return new ApiOkResponse<Guid>(result);
+        }
+
+        public async Task<ApiBaseResponse> IletisimSil(Guid id)
+        {
+            var response = await _client.DeleteAsync($"api/v1/contacts/{id}");
 
             if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
             {
