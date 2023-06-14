@@ -1,3 +1,5 @@
+using Service.Rapor.Extensions;
+
 namespace Service.Rapor
 {
     public class Program
@@ -12,6 +14,7 @@ namespace Service.Rapor
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.ConfigurePostgreSqlContext(builder.Configuration);
 
             var app = builder.Build();
 
