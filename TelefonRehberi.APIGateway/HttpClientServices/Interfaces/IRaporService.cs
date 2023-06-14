@@ -5,6 +5,7 @@ namespace TelefonRehberi.APIGateway.HttpClientServices.Interfaces
 {
     public interface IRaporService
     {
-        Task<ApiBaseResponse> CreateReport(Rapor rapor);
+        Task<ApiBaseResponse> RaporKaydet(Rapor rapor);
+        Task<ApiBaseResponse> GetirRaporListesi();
     }
 }

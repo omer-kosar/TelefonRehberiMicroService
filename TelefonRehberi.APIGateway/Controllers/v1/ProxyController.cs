@@ -105,10 +105,10 @@ namespace TelefonRehberi.APIGateway.Controllers.v1
             return Ok(kisiIletisimBilgileri);
         }
         [HttpPost("/rapor")]
-        public async Task<IActionResult> CreateRapor()
+        public async Task<IActionResult> RaporKaydet()
         {
             var yeniRapor = new Models.Rapor.Rapor { Durum = (int)RaporDurum.Hazirlaniyor, TalepEdildigiTarih = DateTimeOffset.UtcNow };
-            var baseResult = await _raporService.CreateReport(yeniRapor);
+            var baseResult = await _raporService.RaporKaydet(yeniRapor);
             if (!baseResult.Success)
             {
                 return ProcessError(baseResult);
@@ -116,6 +116,17 @@ namespace TelefonRehberi.APIGateway.Controllers.v1
             var raporId = baseResult.GetResult<Guid>();
 
             return Accepted(new RaporResponseModel { RaporId = raporId, Durum = "Hazırlanıyor", TalepEdildigiTarihi = yeniRapor.TalepEdildigiTarih });
+        }
+        [HttpGet("/rapor")]
+        public async Task<IActionResult> GetirRaporListesi()
+        {
+            var baseResult = await _raporService.GetirRaporListesi();
+            if (!baseResult.Success)
+            {
+                return ProcessError(baseResult);
+            }
+            var result = baseResult.GetResult<IEnumerable<Rapor>>();
+            return Ok(result);
         }
         private IActionResult ProcessError(ApiBaseResponse baseResponse)
         {

@@ -17,7 +17,17 @@ namespace TelefonRehberi.APIGateway.HttpClientServices
         {
             _client = client;
         }
-        public async Task<ApiBaseResponse> CreateReport(Rapor rapor)
+
+        public async Task<ApiBaseResponse> GetirRaporListesi()
+        {
+            var response = await _client.GetAsync("api/v1/reports");
+
+            response.EnsureSuccessStatusCode();
+            var result = await response.ReadContentAs<IEnumerable<Rapor>>();
+            return new ApiOkResponse<IEnumerable<Rapor>>(result);
+        }
+
+        public async Task<ApiBaseResponse> RaporKaydet(Rapor rapor)
         {
             var stringContent = new StringContent(JsonConvert.SerializeObject(rapor), Encoding.UTF8, "application/json");
             var response = await _client.PostAsync("api/v1/reports", stringContent);
