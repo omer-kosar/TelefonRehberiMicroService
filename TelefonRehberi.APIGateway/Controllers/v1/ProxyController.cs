@@ -128,6 +128,17 @@ namespace TelefonRehberi.APIGateway.Controllers.v1
             var result = baseResult.GetResult<IEnumerable<Rapor>>();
             return Ok(result);
         }
+        [HttpGet("/rapor/{raporId:guid}")]
+        public async Task<IActionResult> GetRaporRaporDetayBilgileri(Guid raporId)
+        {
+            var baseResult = await _raporService.GetirRaporDetayBilgileri(raporId);
+            if (!baseResult.Success)
+            {
+                return ProcessError(baseResult);
+            }
+            var result = baseResult.GetResult<IEnumerable<RaporDetayBilgileri>>();
+            return Ok(result);
+        }
         private IActionResult ProcessError(ApiBaseResponse baseResponse)
         {
             return baseResponse switch

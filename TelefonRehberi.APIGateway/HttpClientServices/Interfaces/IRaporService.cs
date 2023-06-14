@@ -7,5 +7,7 @@ namespace TelefonRehberi.APIGateway.HttpClientServices.Interfaces
     {
         Task<ApiBaseResponse> RaporKaydet(Rapor rapor);
         Task<ApiBaseResponse> GetirRaporListesi();
+        Task<ApiBaseResponse> GetirRaporDetayBilgileri(Guid raporId);
+
     }
 }

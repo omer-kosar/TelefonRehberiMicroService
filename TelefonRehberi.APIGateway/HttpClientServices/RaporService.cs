@@ -42,5 +42,13 @@ namespace TelefonRehberi.APIGateway.HttpClientServices
             var result = await response.ReadContentAs<Guid>();
             return new ApiOkResponse<Guid>(result);
         }
+        public async Task<ApiBaseResponse> GetirRaporDetayBilgileri(Guid raporId)
+        {
+            var response = await _client.GetAsync($"api/v1/reports/{raporId}");
+
+            response.EnsureSuccessStatusCode();
+            var result = await response.ReadContentAs<IEnumerable<RaporDetayBilgileri>>();
+            return new ApiOkResponse<IEnumerable<RaporDetayBilgileri>>(result);
+        }
     }
 }
