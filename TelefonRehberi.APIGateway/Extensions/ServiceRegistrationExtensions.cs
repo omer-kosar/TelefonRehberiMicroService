@@ -27,5 +27,9 @@ namespace Service.Kisi.Extensions
         {
             services.AddHttpClient<IIletisimService, IletisimService>(kisi => kisi.BaseAddress = new Uri(configuration["ApiSettings:IletisimUrl"]));
         }
+        public static void ConfigureRaporServisiHttpClient(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddHttpClient<IRaporService, RaporService>(kisi => kisi.BaseAddress = new Uri(configuration["ApiSettings:RaporUrl"]));
+        }
     }
 }
