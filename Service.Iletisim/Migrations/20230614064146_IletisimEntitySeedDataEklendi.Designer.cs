@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Service.Iletisim.Data;
@@ -11,9 +12,11 @@ using Service.Iletisim.Data;
 namespace Service.Iletisim.Migrations
 {
     [DbContext(typeof(IletisimContext))]
-    partial class IletisimContextModelSnapshot : ModelSnapshot
+    [Migration("20230614064146_IletisimEntitySeedDataEklendi")]
+    partial class IletisimEntitySeedDataEklendi
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
