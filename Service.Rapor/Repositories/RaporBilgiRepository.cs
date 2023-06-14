@@ -17,6 +17,11 @@ namespace Service.Rapor.Repositories
             return await _context.RaporBilgi.FindAsync(id);
         }
 
+        public async Task<IEnumerable<RaporBilgi>> GetirRaporDetayBilgiList(Guid raporId)
+        {
+            return await _context.RaporBilgi.Where(i => i.RaporId == raporId).ToListAsync();
+        }
+
         public async Task RaporBilgiKaydet(RaporBilgi raporBilgi)
         {
             _context.RaporBilgi.Add(raporBilgi);

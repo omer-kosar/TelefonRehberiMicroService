@@ -57,6 +57,16 @@ namespace UnitTest.Rapor
             Assert.NotNull(raporBilgi);
             Assert.Equal(id, raporBilgi.Id);
         }
+
+        [Fact]
+        public async Task RaporIdIleOlusturulanRaporBilgileriIstendiginde_RaporDetayBilgileriniDoner()
+        {
+            var repository = await CreateRepositoryAsync();
+            var raporId = new Guid("d6245fe2-0947-11ee-b208-54e1ad72c6a1");
+            var raporDetayBilgileri = await repository.GetirRaporDetayBilgiList(raporId);
+            Assert.NotEmpty(raporDetayBilgileri);
+            Assert.Equal(1, raporDetayBilgileri.Count());
+        }
         private async Task<RaporBilgiRepository> CreateRepositoryAsync()
         {
             RaporContext context = new RaporContext(dbContextOptions);
