@@ -15,6 +15,7 @@ namespace Service.Iletisim
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            builder.Services.ConfigureRepository();
             builder.Services.ConfigurePostgreSqlContext(builder.Configuration);
 
             builder.Services.ConfigureVersioning();
