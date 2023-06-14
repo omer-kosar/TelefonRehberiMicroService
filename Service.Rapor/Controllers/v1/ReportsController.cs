@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Service.Rapor.Dto;
+using Service.Rapor.Filters;
 using Service.Rapor.Repositories;
 using Service.Rapor.Repositories.Interfaces;
 using System.Net;
@@ -23,6 +24,7 @@ namespace Service.Rapor.Controllers.v1
         }
 
         [HttpPost]
+        [ServiceFilter(typeof(ValidationFilter))]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         public async Task<IActionResult> RaporKaydet([FromBody] RaporDto rapor)
         {
