@@ -28,5 +28,11 @@ namespace Service.Rapor.Repositories
         {
             return await _context.Rapor.ToListAsync();
         }
+
+        public async Task RaporGuncelle(Entities.Rapor rapor)
+        {
+            _context.Rapor.Update(rapor);
+            await _context.SaveChangesAsync();
+        }
     }
 }

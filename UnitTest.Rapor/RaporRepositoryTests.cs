@@ -59,9 +59,23 @@ namespace UnitTest.Rapor
         public async Task RaporListesiIstendiginde_RaporlariDoner()
         {
             var repository = await CreateRepositoryAsync();
-            var kisiList = await repository.GetirRaporListesi();
-            Assert.NotEmpty(kisiList);
-            Assert.Equal(2, kisiList.Count());
+            var raporListList = await repository.GetirRaporListesi();
+            Assert.NotEmpty(raporListList);
+            Assert.Equal(2, raporListList.Count());
+        }
+        [Fact]
+        public async Task RaporGuncellenmekIstendiginde_RaporGunceller()
+        {
+            var repository = await CreateRepositoryAsync();
+            var raporId = new Guid("d2f53771-7a90-4306-bd1c-782e8527ec29");
+            var rapor = await repository.GetirRaporById(raporId);
+            rapor.Durum = 2;
+            repository.RaporGuncelle(rapor);
+            var guncelRapor = await repository.GetirRaporById(raporId);
+
+            Assert.NotNull(guncelRapor);
+            Assert.Equal(rapor.Durum, guncelRapor.Durum);
+            Assert.Equal((int)RaporDurum.Tamamlandi, guncelRapor.Durum);
         }
         private async Task<RaporRepository> CreateRepositoryAsync()
         {
@@ -84,6 +98,11 @@ namespace UnitTest.Rapor
                     {
                            Id = new Guid("e50ef18e-0947-11ee-b20b-54e1ad72c6a1"),
                            Durum = (int)RaporDurum.Tamamlandi,
+                           TalepEdildigiTarih = DateTime.Now
+                    } , new Service.Rapor.Entities.Rapor
+                    {
+                           Id = new Guid("d2f53771-7a90-4306-bd1c-782e8527ec29"),
+                           Durum = (int)RaporDurum.Hazirlaniyor,
                            TalepEdildigiTarih = DateTime.Now
                     }
                 });
