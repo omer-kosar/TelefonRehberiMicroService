@@ -34,6 +34,29 @@ namespace UnitTest.Rapor
             Assert.NotNull(rapor);
             Assert.Equal(id, rapor.Id);
         }
+
+        [Fact]
+        public async Task GecerliRaporBilgiModelVerildiginde_RaporBilgiOlusturur()
+        {
+            var repository = await CreateRepositoryAsync();
+
+            var id = new Guid("856b39fb-d802-4574-a0b4-872a12589c60");
+            // Act
+            await repository.RaporBilgiKaydet(new Service.Rapor.Entities.RaporBilgi
+            {
+                Id = id,
+                RaporId = new Guid("d6245fe2-0947-11ee-b208-54e1ad72c6a1"),
+                KonumBilgisi = "Mersin",
+                KisiSayisi = 0,
+                TelefonNumarasiSayisi = 0,
+            });
+
+            // Assert
+            var raporBilgi = await repository.GetirRaporBilgiById(id);
+
+            Assert.NotNull(raporBilgi);
+            Assert.Equal(id, raporBilgi.Id);
+        }
         private async Task<RaporBilgiRepository> CreateRepositoryAsync()
         {
             RaporContext context = new RaporContext(dbContextOptions);

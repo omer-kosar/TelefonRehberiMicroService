@@ -15,7 +15,12 @@ namespace Service.Rapor.Repositories
         public async Task<RaporBilgi> GetirRaporBilgiById(Guid id)
         {
             return await _context.RaporBilgi.FindAsync(id);
+        }
 
+        public async Task RaporBilgiKaydet(RaporBilgi raporBilgi)
+        {
+            _context.RaporBilgi.Add(raporBilgi);
+            await _context.SaveChangesAsync();
         }
     }
 }
