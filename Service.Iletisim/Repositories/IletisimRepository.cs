@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Service.Iletisim.Data;
+using Service.Iletisim.Dto;
+using Service.Iletisim.Enums;
 using Service.Iletisim.Repositories.Interfaces;
 
 namespace Service.Iletisim.Repositories
@@ -37,6 +39,12 @@ namespace Service.Iletisim.Repositories
         public async Task<IEnumerable<Entities.Iletisim>> GetIletisimBilgileriByKisiId(Guid kisiId)
         {
             return await _context.Iletisim.Where(i => i.KisiId.Equals(kisiId)).ToListAsync();
+        }
+        public async Task<KonumRaporuDto> GetirKonumRaporByKonum(string konum)
+        {
+            var kisiSayisi = await _context.Iletisim.Where(i => i.Icerik.Equals(konum) && i.IletisimType == (int)IletisimType.Konum).CountAsync();
+            var telefonNumarasiSayisi = await _context.Iletisim.Where(i => i.IletisimType == (int)IletisimType.Telefon && _context.Iletisim.Any(x => x.IletisimType == (int)IletisimType.Konum && x.Icerik.Equals(konum))).CountAsync();
+            return new KonumRaporuDto { KonumBilgisi = konum, KisiSayisi = kisiSayisi, TelefonNumarasiSayisi = telefonNumarasiSayisi };
         }
     }
 }

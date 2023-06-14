@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Service.Iletisim.Data;
+using Service.Iletisim.Entities;
 using Service.Iletisim.Enums;
 using Service.Iletisim.Repositories;
 using System;
@@ -85,12 +86,22 @@ namespace UnitTest.Iletisim
         {
             var repository = await CreateRepositoryAsync();
             var kisiId = new Guid("856b39fb-d802-4574-a0b4-872a12589c59");
-            
 
             var iletisimList = await repository.GetIletisimBilgileriByKisiId(kisiId);
-            // Assert
+
             Assert.NotEmpty(iletisimList);
             Assert.Equal(3, iletisimList.Count());
+        }
+        [Fact]
+        public async Task KonumIleBeraberKonumRaporuGetirilmekIstendiginde_KonumRaporuGetirir()
+        {
+            var repository = await CreateRepositoryAsync();
+            var konum = "Ankara";
+
+            var konumRaporu = await repository.GetirKonumRaporByKonum(konum);
+            Assert.NotNull(konumRaporu);
+            Assert.Equal(2, konumRaporu.KisiSayisi);
+            Assert.Equal(3, konumRaporu.TelefonNumarasiSayisi);
         }
         private async Task<IletisimRepository> CreateRepositoryAsync()
         {

@@ -1,4 +1,6 @@
-﻿namespace Service.Iletisim.Repositories.Interfaces
+﻿using Service.Iletisim.Dto;
+
+namespace Service.Iletisim.Repositories.Interfaces
 {
     public interface IIletisimRepository
     {
@@ -7,5 +9,6 @@
         Task<IEnumerable<Entities.Iletisim>> GetirIletisimListesi();
         Task IletisimSil(Guid id);
         Task<IEnumerable<Entities.Iletisim>> GetIletisimBilgileriByKisiId(Guid kisiId);
+        Task<KonumRaporuDto> GetirKonumRaporByKonum(string konum);
     }
 }
