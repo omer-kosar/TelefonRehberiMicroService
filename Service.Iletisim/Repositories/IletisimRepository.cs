@@ -34,5 +34,9 @@ namespace Service.Iletisim.Repositories
             _context.Iletisim.Remove(deletedIletisim);
             await _context.SaveChangesAsync();
         }
+        public async Task<IEnumerable<Entities.Iletisim>> GetIletisimBilgileriByKisiId(Guid kisiId)
+        {
+            return await _context.Iletisim.Where(i => i.KisiId.Equals(kisiId)).ToListAsync();
+        }
     }
 }

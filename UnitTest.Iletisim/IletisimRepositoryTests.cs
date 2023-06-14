@@ -79,6 +79,19 @@ namespace UnitTest.Iletisim
             Assert.NotEmpty(iletisimList);
             Assert.Equal(5, iletisimList.Count());
         }
+
+        [Fact]
+        public async Task GecerliKisiIdIle_IletisimKisininIletisimBilgileriIstendiginde_IletisimBilgileriniGetirir()
+        {
+            var repository = await CreateRepositoryAsync();
+            var kisiId = new Guid("856b39fb-d802-4574-a0b4-872a12589c59");
+            
+
+            var iletisimList = await repository.GetIletisimBilgileriByKisiId(kisiId);
+            // Assert
+            Assert.NotEmpty(iletisimList);
+            Assert.Equal(3, iletisimList.Count());
+        }
         private async Task<IletisimRepository> CreateRepositoryAsync()
         {
             IletisimContext context = new IletisimContext(dbContextOptions);
