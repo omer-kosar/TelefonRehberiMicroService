@@ -16,6 +16,8 @@ namespace Service.Rapor
             builder.Services.AddSwaggerGen();
             builder.Services.ConfigurePostgreSqlContext(builder.Configuration);
 
+            builder.Services.ConfigureVersioning();
+            builder.Services.ConfigureVersionedApiExplorer();
             var app = builder.Build().MigrateDatabase();
 
             // Configure the HTTP request pipeline.
