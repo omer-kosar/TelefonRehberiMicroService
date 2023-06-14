@@ -13,7 +13,6 @@ namespace Service.Iletisim.Controllers.v1
     [ApiController]
     public class ContactsController : ControllerBase
     {
-        //kişi id ile iletişim bilgileri getir
         private readonly IIletisimRepository _iletisimRepository;
         public ContactsController(IIletisimRepository iletisimRepository)
         {
