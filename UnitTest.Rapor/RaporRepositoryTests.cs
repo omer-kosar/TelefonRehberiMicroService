@@ -55,6 +55,14 @@ namespace UnitTest.Rapor
             Assert.NotNull(kisi);
             Assert.Equal(id, kisi.Id);
         }
+        [Fact]
+        public async Task RaporListesiIstendiginde_RaporlariDoner()
+        {
+            var repository = await CreateRepositoryAsync();
+            var kisiList = await repository.GetirRaporListesi();
+            Assert.NotEmpty(kisiList);
+            Assert.Equal(2, kisiList.Count());
+        }
         private async Task<RaporRepository> CreateRepositoryAsync()
         {
             RaporContext context = new RaporContext(dbContextOptions);

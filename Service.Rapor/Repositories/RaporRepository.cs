@@ -24,5 +24,9 @@ namespace Service.Rapor.Repositories
             _context.Rapor.Add(rapor);
             await _context.SaveChangesAsync();
         }
+        public async Task<IEnumerable<Entities.Rapor>> GetirRaporListesi()
+        {
+            return await _context.Rapor.ToListAsync();
+        }
     }
 }
