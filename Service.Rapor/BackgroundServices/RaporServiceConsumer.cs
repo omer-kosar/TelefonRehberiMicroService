@@ -1,6 +1,9 @@
-﻿using RabbitMQ.Client;
+﻿using Newtonsoft.Json;
+using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using System.Text;
 using System.Threading.Channels;
+using Service.Rapor.Dto;
 
 namespace Service.Rapor.BackgroundServices
 {
@@ -26,6 +29,10 @@ namespace Service.Rapor.BackgroundServices
 
             consumer.Received += async (model, ea) =>
             {
+                var body = ea.Body.ToArray();
+                var message = Encoding.UTF8.GetString(body);
+                var raporTalepModel = JsonConvert.DeserializeObject<RaporTalepDto>(message);
+
             };
             _channel.BasicConsume(queue: "rapor-talepleri",
                                autoAck: false,
