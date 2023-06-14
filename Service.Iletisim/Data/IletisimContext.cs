@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Service.Iletisim.Data.Configuration;
 
 namespace Service.Iletisim.Data
 {
@@ -9,5 +10,9 @@ namespace Service.Iletisim.Data
 
         }
         public DbSet<Entities.Iletisim> Iletisim { get; set; }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfiguration(new IletisimConfiguration());
+        }
     }
 }
