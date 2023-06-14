@@ -1,11 +1,14 @@
 ﻿using Entities.Responses;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using TelefonRehberi.APIGateway.Enums;
+using TelefonRehberi.APIGateway.HttpClientServices;
 using TelefonRehberi.APIGateway.HttpClientServices.Interfaces;
 using TelefonRehberi.APIGateway.Models.ErrorModels;
 using TelefonRehberi.APIGateway.Models.Exceptions;
 using TelefonRehberi.APIGateway.Models.Iletisim;
 using TelefonRehberi.APIGateway.Models.Kisi;
+using TelefonRehberi.APIGateway.Models.Rapor;
 using TelefonRehberi.APIGateway.Models.Responses;
 
 namespace TelefonRehberi.APIGateway.Controllers.v1
@@ -18,11 +21,13 @@ namespace TelefonRehberi.APIGateway.Controllers.v1
         //kisiid ile iletişim bilgileri getir
         private readonly IKisiService _kisiService;
         private readonly IIletisimService _iletisimService;
+        private readonly IRaporService _raporService;
 
-        public ProxyController(IKisiService kisiService, IIletisimService iletisimService)
+        public ProxyController(IKisiService kisiService, IIletisimService iletisimService, IRaporService raporService)
         {
             _kisiService = kisiService;
             _iletisimService = iletisimService;
+            _raporService = raporService;
         }
 
         [HttpGet("/kisi")]
@@ -98,6 +103,41 @@ namespace TelefonRehberi.APIGateway.Controllers.v1
             var iletisimBilgileri = iletisimResult.GetResult<List<IletisimBilgileri>>();
             var kisiIletisimBilgileri = new KisiIletisimbilgileri { Ad = kisi.Ad, Soyad = kisi.Soyad, Firma = kisi.Firma, IletisimBilgileri = iletisimBilgileri };
             return Ok(kisiIletisimBilgileri);
+        }
+        [HttpPost("/rapor")]
+        public async Task<IActionResult> RaporKaydet()
+        {
+            var yeniRapor = new Models.Rapor.Rapor { Durum = (int)RaporDurum.Hazirlaniyor, TalepEdildigiTarih = DateTimeOffset.UtcNow };
+            var baseResult = await _raporService.RaporKaydet(yeniRapor);
+            if (!baseResult.Success)
+            {
+                return ProcessError(baseResult);
+            }
+            var raporId = baseResult.GetResult<Guid>();
+
+            return Accepted(new RaporResponseModel { RaporId = raporId, Durum = "Hazırlanıyor", TalepEdildigiTarihi = yeniRapor.TalepEdildigiTarih });
+        }
+        [HttpGet("/rapor")]
+        public async Task<IActionResult> GetirRaporListesi()
+        {
+            var baseResult = await _raporService.GetirRaporListesi();
+            if (!baseResult.Success)
+            {
+                return ProcessError(baseResult);
+            }
+            var result = baseResult.GetResult<IEnumerable<Rapor>>();
+            return Ok(result);
+        }
+        [HttpGet("/rapor/{raporId:guid}")]
+        public async Task<IActionResult> GetRaporRaporDetayBilgileri(Guid raporId)
+        {
+            var baseResult = await _raporService.GetirRaporDetayBilgileri(raporId);
+            if (!baseResult.Success)
+            {
+                return ProcessError(baseResult);
+            }
+            var result = baseResult.GetResult<IEnumerable<RaporDetayBilgileri>>();
+            return Ok(result);
         }
         private IActionResult ProcessError(ApiBaseResponse baseResponse)
         {

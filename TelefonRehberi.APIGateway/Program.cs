@@ -19,6 +19,7 @@ namespace TelefonRehberi.APIGateway
             builder.Services.ConfigureVersionedApiExplorer();
             builder.Services.ConfigureKisiServisiHttpClient(builder.Configuration);
             builder.Services.ConfigureIletisimServisiHttpClient(builder.Configuration);
+            builder.Services.ConfigureRaporServisiHttpClient(builder.Configuration);
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
