@@ -21,12 +21,6 @@ namespace TelefonRehberi.APIGateway.HttpClientServices
 
             var response = await _client.GetAsync($"api/v1/contacts/{kisiId}");
 
-            if (response.StatusCode == System.Net.HttpStatusCode.UnprocessableEntity)
-            {
-                var errorMessage = await response.ReadContentAs();
-                return new PersonUnprocessableResponse(errorMessage);
-            }
-
             response.EnsureSuccessStatusCode();
             var result = await response.ReadContentAs<List<IletisimBilgileri>>();
             return new ApiOkResponse<List<IletisimBilgileri>>(result);
