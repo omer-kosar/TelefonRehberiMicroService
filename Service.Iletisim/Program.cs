@@ -25,7 +25,7 @@ namespace Service.Iletisim
                 => options.SuppressModelStateInvalidFilter = true); 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            //builder.Services.AddSwaggerGen();
 
             builder.Services.ConfigureRepository();
             builder.Services.ConfigurePostgreSqlContext(builder.Configuration);
@@ -35,11 +35,11 @@ namespace Service.Iletisim
             var app = builder.Build().MigrateDatabase();
 
             // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
+            //if (app.Environment.IsDevelopment())
+            //{
+            //    app.UseSwagger();
+            //    app.UseSwaggerUI();
+            //}
 
             app.UseHttpsRedirection();
 
