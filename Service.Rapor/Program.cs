@@ -31,6 +31,9 @@ namespace Service.Rapor
 
             builder.Services.ConfigureVersioning();
             builder.Services.ConfigureVersionedApiExplorer();
+
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
             var app = builder.Build().MigrateDatabase();
 
             // Configure the HTTP request pipeline.
