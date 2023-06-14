@@ -17,7 +17,7 @@ namespace Service.Iletisim
 
             builder.Services.ConfigurePostgreSqlContext(builder.Configuration);
 
-            var app = builder.Build();
+            var app = builder.Build().MigrateDatabase();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
