@@ -31,5 +31,15 @@ namespace Service.Iletisim.Controllers.v1
             await _iletisimRepository.IletisimKaydet(iletisimEntity);
             return Ok(iletisimEntity.Id);
         }
+        [HttpDelete("{id:guid}")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        public async Task<IActionResult> IletisimSilById(Guid id)
+        {
+            var deletedIletisim = await _iletisimRepository.GetirIletisimById(id);
+            if (deletedIletisim is null)
+                return NotFound($"Contact was not able to found with id:{id}");
+            await _iletisimRepository.IletisimSil(id);
+            return NoContent();
+        }
     }
 }

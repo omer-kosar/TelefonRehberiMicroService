@@ -45,6 +45,32 @@ namespace UnitTest.Iletisim
             Assert.Equal(StatusCodes.Status200OK, result.StatusCode);
             Assert.Equal(true, Guid.TryParse(result.Value.ToString(), out var iletisimId));
         }
+
+        [Fact]
+        public async Task KayitliIletisimIdIleSilinmekIstendiginde_IletisimSiler()
+        {
+            var repository = await CreateRepositoryAsync();
+            var contactsController = new ContactsController(repository);
+
+            var id = Guid.Parse("e85e3cf0-974e-4bc5-9dee-7d47094d039e");
+            var result = await contactsController.IletisimSilById(id) as StatusCodeResult;
+            Assert.NotNull(result);
+            Assert.Equal(StatusCodes.Status204NoContent, result.StatusCode);
+        }
+        [Fact]
+        public async Task KayitliOlmayanIdIleIletisimSilinmekIstendiginde_BulunamadiDoner()
+        {
+            var repository = await CreateRepositoryAsync();
+            var contactsController = new ContactsController(repository);
+
+            var id = Guid.Parse("f4f4e3bf-afa6-4399-87b5-a3fe17572c4d");
+
+            var result = await contactsController.IletisimSilById(id) as ObjectResult;
+            Assert.NotNull(result);
+
+            Assert.Equal(StatusCodes.Status404NotFound, result.StatusCode);
+            Assert.Equal($"Contact was not able to found with id:{id}", result.Value);
+        }
         private async Task<IletisimRepository> CreateRepositoryAsync()
         {
             IletisimContext context = new IletisimContext(dbContextOptions);
