@@ -116,7 +116,9 @@ namespace TelefonRehberi.APIGateway.Controllers.v1
             var kisiIletisimBilgileri = new KisiIletisimbilgileri { Ad = kisi.Ad, Soyad = kisi.Soyad, Firma = kisi.Firma, IletisimBilgileri = iletisimBilgileri };
             return Ok(kisiIletisimBilgileri);
         }
-        [HttpPost("/rapor")]
+
+        [HttpPost]
+        [Route("api/v{version:apiVersion}/telefon-rehberi-gateway/rapor")]
         public async Task<IActionResult> RaporKaydet(string konum)
         {
             var yeniRapor = new Models.Rapor.Rapor { Durum = (int)RaporDurum.Hazirlaniyor, TalepEdildigiTarih = DateTimeOffset.UtcNow };
@@ -129,7 +131,10 @@ namespace TelefonRehberi.APIGateway.Controllers.v1
             _messageProducer.SendRaporOlusturMesaj(new RaporTalepModel { RaporId = raporId, Konum = konum });
             return Accepted(new RaporResponseModel { RaporId = raporId, Durum = "Hazırlanıyor", TalepEdildigiTarihi = yeniRapor.TalepEdildigiTarih });
         }
-        [HttpGet("/rapor")]
+
+        [HttpGet]
+        [Route("api/v{version:apiVersion}/telefon-rehberi-gateway/rapor")]
+
         public async Task<IActionResult> GetirRaporListesi()
         {
             var baseResult = await _raporService.GetirRaporListesi();
@@ -140,7 +145,8 @@ namespace TelefonRehberi.APIGateway.Controllers.v1
             var result = baseResult.GetResult<IEnumerable<Rapor>>();
             return Ok(result);
         }
-        [HttpGet("/rapor/{raporId:guid}")]
+        [HttpGet]
+        [Route("api/v{version:apiVersion}/telefon-rehberi-gateway/rapor/{raporId:guid}")]
         public async Task<IActionResult> GetRaporRaporDetayBilgileri(Guid raporId)
         {
             var baseResult = await _raporService.GetirRaporDetayBilgileri(raporId);
