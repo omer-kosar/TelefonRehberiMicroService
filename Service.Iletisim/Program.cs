@@ -1,3 +1,5 @@
+using Service.Iletisim.Extensions;
+
 namespace Service.Iletisim
 {
     public class Program
@@ -12,6 +14,8 @@ namespace Service.Iletisim
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.ConfigurePostgreSqlContext(builder.Configuration);
 
             var app = builder.Build();
 
