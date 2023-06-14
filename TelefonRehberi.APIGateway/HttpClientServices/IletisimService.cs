@@ -1,8 +1,34 @@
-﻿using TelefonRehberi.APIGateway.HttpClientServices.Interfaces;
+﻿using Entities.Responses;
+using Newtonsoft.Json;
+using System.Text;
+using TelefonRehberi.APIGateway.Extensions;
+using TelefonRehberi.APIGateway.HttpClientServices.Interfaces;
+using TelefonRehberi.APIGateway.Models.Iletisim;
+using TelefonRehberi.APIGateway.Models.Responses;
 
 namespace TelefonRehberi.APIGateway.HttpClientServices
 {
-    public class IletisimService:IIletisimService
+    public class IletisimService : IIletisimService
     {
+        private readonly HttpClient _client;
+        public IletisimService(HttpClient client)
+        {
+            _client = client ?? throw new ArgumentNullException(nameof(client));
+        }
+        public async Task<ApiBaseResponse> IletisimKaydet(IletisimBilgileri iletisim)
+        {
+            var stringContent = new StringContent(JsonConvert.SerializeObject(iletisim), Encoding.UTF8, "application/json");
+            var response = await _client.PostAsync("api/v1/contacts", stringContent);
+
+            if (response.StatusCode == System.Net.HttpStatusCode.UnprocessableEntity)
+            {
+                var errorMessage = await response.ReadContentAs();
+                return new PersonUnprocessableResponse(errorMessage);
+            }
+
+            response.EnsureSuccessStatusCode();
+            var result = await response.ReadContentAs<Guid>();
+            return new ApiOkResponse<Guid>(result);
+        }
     }
 }

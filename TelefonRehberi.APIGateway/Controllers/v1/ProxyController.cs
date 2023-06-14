@@ -19,10 +19,12 @@ namespace TelefonRehberi.APIGateway.Controllers.v1
         //iletişimsil
         //kisiid ile iletişim bilgileri getir
         private readonly IKisiService _kisiService;
+        private readonly IIletisimService _iletisimService;
 
-        public ProxyController(IKisiService kisiService)
+        public ProxyController(IKisiService kisiService, IIletisimService iletisimService)
         {
             _kisiService = kisiService;
+            _iletisimService = iletisimService;
         }
 
         [HttpGet("/kisi")]
@@ -59,6 +61,18 @@ namespace TelefonRehberi.APIGateway.Controllers.v1
             return NoContent();
         }
 
+
+        [HttpPost("/iletisim")]
+        public async Task<IActionResult> Iletisim(IletisimBilgileri iletisim)
+        {
+
+            var baseResult = await _iletisimService.IletisimKaydet(iletisim);
+            if (!baseResult.Success)
+            {
+                return ProcessError(baseResult);
+            }
+            return Ok(baseResult.GetResult<Guid>());
+        }
         private IActionResult ProcessError(ApiBaseResponse baseResponse)
         {
             return baseResponse switch
